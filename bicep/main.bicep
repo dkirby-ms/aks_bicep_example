@@ -6,7 +6,7 @@ param sshRSAPublicKey string
 param githubAccount string = 'dkirby-ms'
 
 @description('Target GitHub branch')
-param githubBranch string = 'main'
+param githubBranch string = 'master'
 
 var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bicep_example/${githubBranch}/'
 
