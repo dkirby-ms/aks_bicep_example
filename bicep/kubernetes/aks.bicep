@@ -38,7 +38,7 @@ param enableRBAC bool = true
 param aksSubnetId string
 
 @description('Name of the Azure Container Registry')
-param acrName string = 'VideoAI-ACR'
+param acrName string = 'videoaiacr'
 
 @description('Provide a tier of your Azure Container Registry.')
 param acrSku string = 'Basic'

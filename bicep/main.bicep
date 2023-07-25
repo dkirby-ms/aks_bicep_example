@@ -8,7 +8,7 @@ param githubAccount string = 'dkirby-ms'
 @description('Target GitHub branch')
 param githubBranch string = 'main'
 
-var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/azure_arc/${githubBranch}/azure_jumpstart_arcbox/'
+var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bicep_example/${githubBranch}/'
 
 var location = resourceGroup().location
 
