@@ -2,7 +2,7 @@
 param vmName string = 'UbuntuServer-VM1'
 
 @description('Username for the Virtual Machine')
-param adminUsername string = 'admin'
+param adminUsername string = 'videoadmin'
 
 @description('SSH Key for the Virtual Machine. SSH key is recommended over password')
 @secure()
