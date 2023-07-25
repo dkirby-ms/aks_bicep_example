@@ -10,7 +10,7 @@ param storageAccountType string = 'Standard_LRS'
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
-var storageAccountName = 'contentstorage${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'content${uniqueString(resourceGroup().id)}'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
