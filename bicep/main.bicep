@@ -11,11 +11,10 @@ param githubBranch string = 'master'
 @description('ObjectId of the named user or service principal that should be granted access to key vault via template deployment')
 param keyVaultUserObjectId string
 
-
+@description('Location is the Azure region where the template resources will be deployed')
+param location string = resourceGroup().location
 
 var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bicep_example/${githubBranch}/'
-
-var location = resourceGroup().location
 
 module network 'network/vnet.bicep' = {
   name: 'networkDeployment'
