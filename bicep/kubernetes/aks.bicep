@@ -10,7 +10,7 @@ param resourceTags object = {
 }
 
 @description('Optional DNS prefix to use with hosted Kubernetes API server FQDN')
-param dnsPrefixStaging string = 'VideoAI'
+param dnsPrefixStaging string = 'videoai'
 
 @description('Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize')
 @minValue(0)

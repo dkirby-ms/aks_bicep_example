@@ -8,6 +8,11 @@ param githubAccount string = 'dkirby-ms'
 @description('Target GitHub branch')
 param githubBranch string = 'master'
 
+@description('ObjectId of the named user or service principal that should be granted access to key vault via template deployment')
+param keyVaultUserObjectId string
+
+
+
 var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bicep_example/${githubBranch}/'
 
 var location = resourceGroup().location
@@ -50,5 +55,16 @@ module eventhub 'messaging/eventhub.bicep' = {
   params: {
     location: location
     projectName: 'videoai'
+  }
+}
+
+module keyVault 'management/keyvault.bicep' = {
+  name: 'keyVaultDeployment'
+  params: {
+    location: location
+    keyVaultName: 'videoai_kv'
+    objectId: keyVaultUserObjectId
+    secretName: 'example_secret'
+    secretValue: 'example_secret_value'
   }
 }
