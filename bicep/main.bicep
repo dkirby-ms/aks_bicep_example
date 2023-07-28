@@ -12,38 +12,43 @@ var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bi
 
 var location = resourceGroup().location
 
-module networkDeployment 'network/vnet.bicep' = {
+module network 'network/vnet.bicep' = {
   name: 'networkDeployment'
   params: {
     location: location
   }
 }
 
-module ubuntuDeployment 'virtual_machine/ubuntu.bicep' = {
+module ubuntu 'virtual_machine/ubuntu.bicep' = {
   name: 'ubuntuDeployment'
   params: {
     sshRSAPublicKey: sshRSAPublicKey
-    subnetId: networkDeployment.outputs.subnetId
+    subnetId: network.outputs.subnetId
     templateBaseUrl: templateBaseUrl
     azureLocation: location
   }
 }
 
-module stagingStorageAccountDeployment 'storage/storageAccount.bicep' = {
+module stagingStorageAccount 'storage/storageAccount.bicep' = {
   name: 'stagingStorageAccountDeployment'
   params: {
     location: location
   }
 }
 
-module aksDeployment 'kubernetes/aks.bicep' = {
+module aks 'kubernetes/aks.bicep' = {
   name: 'aksDeployment'
   params: {
     sshRSAPublicKey: sshRSAPublicKey
     location: location
-    aksSubnetId: networkDeployment.outputs.subnetId
+    aksSubnetId: network.outputs.subnetId
   }
-  dependsOn: [
-    stagingStorageAccountDeployment
-  ]
+}
+
+module eventhub 'messaging/eventhub.bicep' = {
+  name: 'eventhubDeployment'
+  params: {
+    location: location
+    projectName: 'videoai'
+  }
 }

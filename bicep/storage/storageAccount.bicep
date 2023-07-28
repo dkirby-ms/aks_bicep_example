@@ -10,10 +10,11 @@ param storageAccountType string = 'Standard_LRS'
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
-var storageAccountName = 'content${uniqueString(resourceGroup().id)}'
+var contentStorageAccountName = 'content${uniqueString(resourceGroup().id)}'
+var stagingStorageAccountName = 'staging${uniqueString(resourceGroup().id)}'
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
-  name: storageAccountName
+resource contentStorageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
+  name: contentStorageAccountName
   location: location
   sku: {
     name: storageAccountType
@@ -24,4 +25,16 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   }
 }
 
-output storageAccountName string = storageAccountName
+resource stagingStorageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
+  name: stagingStorageAccountName
+  location: location
+  sku: {
+    name: storageAccountType
+  }
+  kind: 'StorageV2'
+  properties: {
+    supportsHttpsTrafficOnly: true
+  }
+}
+
+output contentStorageAccountName string = contentStorageAccountName
