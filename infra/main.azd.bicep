@@ -1,4 +1,9 @@
-@description('RSA public key used for securing SSH access to ArcBox resources')
+@minLength(1)
+@maxLength(77)
+@description('Prefix for resource group, i.e. {name}-rg')
+param envName string
+
+@description('RSA public key used for securing SSH access to resources')
 @secure()
 param sshRSAPublicKey string
 
@@ -12,12 +17,20 @@ param githubBranch string = 'master'
 param keyVaultUserObjectId string
 
 @description('Location is the Azure region where the template resources will be deployed')
-param location string = resourceGroup().location
+param location string
 
 var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bicep_example/${githubBranch}/'
 
+targetScope = 'subscription'
+
+resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: '${envName}-rg'
+  location: location
+}
+
 module network 'network/vnet.bicep' = {
   name: 'networkDeployment'
+  scope: rg
   params: {
     location: location
   }
@@ -25,6 +38,7 @@ module network 'network/vnet.bicep' = {
 
 module ubuntu 'virtual_machine/ubuntu.bicep' = {
   name: 'ubuntuDeployment'
+  scope: rg
   params: {
     sshRSAPublicKey: sshRSAPublicKey
     subnetId: network.outputs.subnetId
@@ -35,6 +49,7 @@ module ubuntu 'virtual_machine/ubuntu.bicep' = {
 
 module stagingStorageAccount 'storage/storageAccount.bicep' = {
   name: 'stagingStorageAccountDeployment'
+  scope: rg
   params: {
     location: location
   }
@@ -42,6 +57,7 @@ module stagingStorageAccount 'storage/storageAccount.bicep' = {
 
 module aks 'kubernetes/aks.bicep' = {
   name: 'aksDeployment'
+  scope: rg
   params: {
     sshRSAPublicKey: sshRSAPublicKey
     location: location
@@ -51,6 +67,7 @@ module aks 'kubernetes/aks.bicep' = {
 
 module eventhub 'messaging/eventhub.bicep' = {
   name: 'eventhubDeployment'
+  scope: rg
   params: {
     location: location
     projectName: 'videoai'
@@ -59,11 +76,14 @@ module eventhub 'messaging/eventhub.bicep' = {
 
 module keyVault 'management/keyvault.bicep' = {
   name: 'keyVaultDeployment'
+  scope: rg
   params: {
     location: location
-    keyVaultName: 'videoai_kv'
+    keyVaultName: 'videoaikv'
     objectId: keyVaultUserObjectId
     secretName: 'example_secret'
     secretValue: 'example_secret_value'
   }
 }
+
+output AZURE_RESOURCE_GROUP string = rg.name
