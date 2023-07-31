@@ -20,10 +20,20 @@ kubectl create namespace $appNamespace
 # Create GitOps config for NGINX Ingress Controller
 echo "Creating GitOps config for NGINX Ingress Controller"
 az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-nginx --namespace $ingressNamespace --cluster-type managedClusters --scope cluster --url $appRepo --branch main --sync-interval 3s --kustomization name=nginx path=./nginx/release
+provisioningState=""
+while [ "$provisioningState" != "Succeeded" ]
+do
+    provisioningState=$(az aks show -g aks_bicep_example-dev-rg -n VideoAI-AKS --query provisioningState -o tsv)
+done
 
 # Create GitOps config for Hello-Arc application
 echo "Creating GitOps config for Hello-Arc application"
 az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloarc --namespace hello-arc --cluster-type managedClusters --scope namespace --url $appRepo --branch main --sync-interval 3s --kustomization name=helloarc path=./hello-arc/yaml
+provisioningState=""
+while [ "$provisioningState" != "Succeeded" ]
+do
+    provisioningState=$(az aks show -g aks_bicep_example-dev-rg -n VideoAI-AKS --query provisioningState -o tsv)
+done
 
 # Install Key Vault extension on AKS cluster and set permissions for the user assigned identity to allow importing certificates
 echo "Installing Azure Key Vault Kubernetes extension instance"
@@ -35,12 +45,12 @@ az keyvault set-policy -n "$keyVaultName" --certificate-permissions get list imp
 
 # Create TLS certificate for ingress controller
 echo "Creating self-signed TLS certificate"
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $certname.key -out $certname.pem -subj "/C=US/ST=LA/L=Covington/O=Dis/CN=www.example.com"
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $certname.pem -out $certname.pem -subj "/C=US/ST=LA/L=Covington/O=Dis/CN=$certdns"
 #$cert = New-SelfSignedCertificate -DnsName $certdns -KeyAlgorithm RSA -KeyLength 2048 -NotAfter (Get-Date).AddYears(1) -CertStoreLocation "Cert:\CurrentUser\My"
 #$certPassword = ConvertTo-SecureString -String "certpassword" -Force -AsPlainText
 #Export-PfxCertificate -Cert "cert:\CurrentUser\My\$($cert.Thumbprint)" -FilePath "$certname.pfx" -Password $certPassword
 echo "Importing the TLS certificate to Key Vault"
-az keyvault certificate import --vault-name "$keyVaultName" --name $certname--file "$certname.pem"
+az keyvault certificate import --vault-name "$keyVaultName" --name $certname --file "$certname.pem"
 
 # Update yaml placeholder values
 pathToYaml="./artifacts/hello-arc.yaml"
