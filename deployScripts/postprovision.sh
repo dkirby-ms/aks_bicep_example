@@ -46,9 +46,6 @@ az keyvault set-policy -n "$keyVaultName" --certificate-permissions get list imp
 # Create TLS certificate for ingress controller
 echo "Creating self-signed TLS certificate"
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $certname.pem -out $certname.pem -subj "/C=US/ST=LA/L=Covington/O=Dis/CN=$certdns"
-#$cert = New-SelfSignedCertificate -DnsName $certdns -KeyAlgorithm RSA -KeyLength 2048 -NotAfter (Get-Date).AddYears(1) -CertStoreLocation "Cert:\CurrentUser\My"
-#$certPassword = ConvertTo-SecureString -String "certpassword" -Force -AsPlainText
-#Export-PfxCertificate -Cert "cert:\CurrentUser\My\$($cert.Thumbprint)" -FilePath "$certname.pfx" -Password $certPassword
 echo "Importing the TLS certificate to Key Vault"
 az keyvault certificate import --vault-name "$keyVaultName" --name $certname --file "$certname.pem"
 
