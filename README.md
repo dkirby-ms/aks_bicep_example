@@ -19,7 +19,7 @@ This repo provides sample Azure Bicep files for deploying AKS and associated res
 * Install providers and tools
 
     ```shell
-    az aks install-cli
+    sudo az aks install-cli
     az provider register --namespace Microsoft.Kubernetes --wait
     az provider register --namespace Microsoft.ContainerService --wait
     az provider register --namespace Microsoft.KubernetesConfiguration --wait
