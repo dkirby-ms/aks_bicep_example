@@ -26,9 +26,9 @@ do
     provisioningState=$(az aks show -g aks_bicep_example-dev-rg -n VideoAI-AKS --query provisioningState -o tsv)
 done
 
-# Create GitOps config for Hello-Arc application
-echo "Creating GitOps config for Hello-Arc application"
-az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloarc --namespace hello-arc --cluster-type managedClusters --scope namespace --url $appRepo --branch main --sync-interval 3s --kustomization name=helloarc path=./hello-arc/yaml
+# Create GitOps config for Hello-World application
+echo "Creating GitOps config for Hello-World application"
+az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloworld --namespace hello-world --cluster-type managedClusters --scope namespace --url $appRepo --branch main --sync-interval 3s --kustomization name=helloworld path=./hello-arc/yaml
 provisioningState=""
 while [ "$provisioningState" != "Succeeded" ]
 do
@@ -53,14 +53,14 @@ az keyvault certificate import --vault-name "$keyVaultName" --name $certname --f
 pathToYaml="./artifacts/hello-arc.yaml"
 modifiedYaml="hello-arc-modified.yaml"
 cp $pathToYaml $modifiedYaml -f
-sed -i "s/JS_CERTNAME/$certname/g" $modifiedYaml
-sed -i "s/JS_KEYVAULTNAME/$keyVaultName/g" $modifiedYaml
-sed -i "s/JS_HOST/$certdns/g" $modifiedYaml
-sed -i "s/JS_TENANTID/$tenantId/g" $modifiedYaml
+sed -i "s/{JS_CERTNAME}/$certname/g" $modifiedYaml
+sed -i "s/{JS_KEYVAULTNAME}/$keyVaultName/g" $modifiedYaml
+sed -i "s/{JS_HOST}/$certdns/g" $modifiedYaml
+sed -i "s/{JS_TENANTID}/$tenantId/g" $modifiedYaml
 
 # Deploy ingress controller
 kubectl --namespace $appNamespace apply -f $modifiedYaml
 ip=$(kubectl get service/ingress-nginx-controller --namespace $ingressNamespace --output=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo "Hello-arc service IP: $ip"
+echo "Hello-world service IP: $ip"
 #Add-Content -Path $Env:windir\System32\drivers\etc\hosts -Value "`n`t$ip`t$certdns" -Force
 
