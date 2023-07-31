@@ -76,7 +76,9 @@ $AZURE_PUBLIC_SSH_KEY = $AZURE_PUBLIC_SSH_KEY.Replace("\", "\\")
 azd env set AZURE_PUBLIC_SSH_KEY $AZURE_PUBLIC_SSH_KEY
 
 ########################################################################
-# Get the logged in user's object ID
+# Get the logged in user's object ID and tenant ID
 ########################################################################
-$USER_OBJECT_ID = az ad signed-in-user show --query id -o tsvc
+$USER_OBJECT_ID = az ad signed-in-user show --query id -o tsv
 azd env set USER_OBJECT_ID $USER_OBJECT_ID
+$TENANT_ID = az account show --query tenantId -o tsv
+azd env set TENANT_ID $TENANT_ID
