@@ -9,8 +9,6 @@ clusterName=$AKS_CLUSTER_NAME
 keyVaultName=$KEYVAULT_NAME
 tenantId=$TENANT_ID
 
-sudo az aks install-cli
-
 az config set extension.use_dynamic_install=yes_without_prompt
 
 # Get AKS credential and create namespaces
@@ -21,11 +19,11 @@ kubectl create namespace $appNamespace
 
 # Create GitOps config for NGINX Ingress Controller
 echo "Creating GitOps config for NGINX Ingress Controller"
-az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-nginx --namespace $ingressNamespace --cluster-type connectedClusters --scope cluster --url $appRepo --branch main --sync-interval 3s --kustomization name=nginx path=./nginx/release
+az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-nginx --namespace $ingressNamespace --cluster-type managedClusters --scope cluster --url $appRepo --branch main --sync-interval 3s --kustomization name=nginx path=./nginx/release
 
 # Create GitOps config for Hello-Arc application
 echo "Creating GitOps config for Hello-Arc application"
-az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloarc --namespace hello-arc --cluster-type connectedClusters --scope namespace --url $appRepo --branch main --sync-interval 3s --kustomization name=helloarc path=./hello-arc/yaml
+az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloarc --namespace hello-arc --cluster-type managedClusters --scope namespace --url $appRepo --branch main --sync-interval 3s --kustomization name=helloarc path=./hello-arc/yaml
 
 # Install Key Vault extension on AKS cluster and set permissions for the user assigned identity to allow importing certificates
 echo "Installing Azure Key Vault Kubernetes extension instance"

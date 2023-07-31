@@ -1,5 +1,6 @@
 .azure
-videoai_rsa.pub
+.pub
 .gitignore
-videoai_rsa
+.pem
+.key
 hello-arc-modified.yaml
