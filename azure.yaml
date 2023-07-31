@@ -9,12 +9,12 @@ infra:
   module: "main.azd"
 hooks:
   preprovision:
-    shell: pwsh
-    run: ./deployScripts/preprovision.ps1
+    shell: sh
+    run: ./deployScripts/preprovision.sh
     continueOnError: false
     interactive: true
   postprovision:
-    shell: pwsh
-    run: ./deployScripts/postprovision.ps1
+    shell: sh
+    run: ./deployScripts/postprovision.sh
     continueOnError: false
     interactive: true
