@@ -32,7 +32,7 @@ param linuxAdminUsername string = 'videoadmin'
 param sshRSAPublicKey string
 
 @description('boolean flag to turn on and off of RBAC')
-param enableRBAC bool = true
+param enableRBAC bool = false
 
 @description('The name of the staging aks subnet')
 param aksSubnetId string
