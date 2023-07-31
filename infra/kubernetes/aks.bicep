@@ -72,9 +72,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-03-02-preview' = {
     kubernetesVersion: kubernetesVersion
     enableRBAC: enableRBAC
     dnsPrefix: dnsPrefixStaging
-    aadProfile: {
-      managed: true
-    }
     agentPoolProfiles: [
       {
         name: 'agentpool'
