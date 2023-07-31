@@ -25,7 +25,7 @@ az k8s-configuration flux create `
     --namespace $ingressNamespace `
     --cluster-type connectedClusters `
     --scope cluster `
-    --url $appClonedRepo `
+    --url $appRepo `
     --branch main --sync-interval 3s `
     --kustomization name=nginx path=./nginx/release
 
@@ -38,7 +38,7 @@ az k8s-configuration flux create `
     --namespace hello-arc `
     --cluster-type connectedClusters `
     --scope namespace `
-    --url $appClonedRepo `
+    --url $appRepo `
     --branch main --sync-interval 3s `
     --kustomization name=helloarc path=./hello-arc/yaml
 

@@ -19,6 +19,9 @@ param keyVaultUserObjectId string
 @description('Location is the Azure region where the template resources will be deployed')
 param location string
 
+@description('Random GUID for resource names')
+param guid string = substring(newGuid(),0,4)
+
 var templateBaseUrl = 'https://raw.githubusercontent.com/${githubAccount}/aks_bicep_example/${githubBranch}/'
 
 targetScope = 'subscription'
@@ -83,6 +86,7 @@ module keyVault 'management/keyvault.bicep' = {
     objectId: keyVaultUserObjectId
     secretName: 'example_secret'
     secretValue: 'example_secret_value'
+    guid: guid
   }
 }
 

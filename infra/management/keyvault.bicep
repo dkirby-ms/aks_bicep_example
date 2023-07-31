@@ -48,8 +48,11 @@ param secretName string
 @secure()
 param secretValue string
 
+@description('Random GUID for resource names')
+param guid string
+
 resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-  name: keyVaultName
+  name: '${keyVaultName}${guid}'
   location: location
   properties: {
     enabledForDeployment: enabledForDeployment
