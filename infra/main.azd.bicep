@@ -87,3 +87,5 @@ module keyVault 'management/keyvault.bicep' = {
 }
 
 output AZURE_RESOURCE_GROUP string = rg.name
+output AKS_CLUSTER_NAME string = aks.outputs.clusterName
+output KEYVAULT_NAME string = keyVault.outputs.KEYVAULT_NAME

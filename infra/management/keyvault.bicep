@@ -81,3 +81,5 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
     value: secretValue
   }
 }
+
+output KEYVAULT_NAME string = keyVault.name

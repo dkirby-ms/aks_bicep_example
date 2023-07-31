@@ -13,3 +13,8 @@ hooks:
     run: ./deployScripts/preprovision.ps1
     continueOnError: false
     interactive: true
+  postprovision:
+    shell: pwsh
+    run: ./deployScripts/postprovision.ps1
+    continueOnError: false
+    interactive: false

@@ -1,1 +1,4 @@
 .azure
+videoai_rsa.pub
+.gitignore
+videoai_rsa

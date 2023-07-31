@@ -67,16 +67,16 @@ $file = "videoai_rsa"
 ssh-keygen -q -t rsa -b 4096 -f $file -N '""' 
 
 # Get the public key
-$JS_SSH_RSA_PUBLIC_KEY = get-content "$file.pub"
+$AZURE_PUBLIC_SSH_KEY = get-content "$file.pub"
 
 # Escape the backslashes 
-$JS_SSH_RSA_PUBLIC_KEY = $JS_SSH_RSA_PUBLIC_KEY.Replace("\", "\\")
+$AZURE_PUBLIC_SSH_KEY = $AZURE_PUBLIC_SSH_KEY.Replace("\", "\\")
 
 # set the env variable
-azd env set JS_SSH_RSA_PUBLIC_KEY $JS_SSH_RSA_PUBLIC_KEY
+azd env set AZURE_PUBLIC_SSH_KEY $AZURE_PUBLIC_SSH_KEY
 
 ########################################################################
 # Get the logged in user's object ID
 ########################################################################
-$USER_OBJECT_ID = az ad signed-in-user show --query id -o tsv
+$USER_OBJECT_ID = az ad signed-in-user show --query id -o tsvc
 azd env set USER_OBJECT_ID $USER_OBJECT_ID

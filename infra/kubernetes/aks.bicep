@@ -122,3 +122,5 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-01-01-preview' ={
     adminUserEnabled: true
   }
 }
+
+output clusterName string = aks.name

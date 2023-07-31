@@ -1,10 +1,11 @@
 # AKS Bicep Example
 
-This repo provides sample Azure Bicep files for deploying AKS and associated resources for an Azure application.
+This repo provides sample Azure Bicep files for deploying AKS and associated resources for an Azure application via Azure Developer CLI.
 
-## Deployment
+## Deployment (WIP)
 
 ```shell
-az group create -n MyGroup -l eastus
-az deployment group create -g MyGroup -f main.bicep -p main.parameters.json
+az login
+azd init
+azd up
 ```
