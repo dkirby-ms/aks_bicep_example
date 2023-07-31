@@ -84,8 +84,6 @@ module keyVault 'management/keyvault.bicep' = {
     location: location
     keyVaultName: 'videoaikv'
     objectId: keyVaultUserObjectId
-    secretName: 'example_secret'
-    secretValue: 'example_secret_value'
     guid: guid
   }
 }

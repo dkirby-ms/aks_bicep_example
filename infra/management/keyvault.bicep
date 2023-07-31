@@ -41,13 +41,6 @@ param certificatesPermissions array = [
 ])
 param skuName string = 'standard'
 
-@description('Specifies the name of the secret that you want to create.')
-param secretName string
-
-@description('Specifies the value of the secret that you want to create.')
-@secure()
-param secretValue string
-
 @description('Random GUID for resource names')
 param guid string
 
@@ -80,14 +73,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       defaultAction: 'Allow'
       bypass: 'AzureServices'
     }
-  }
-}
-
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
-  parent: keyVault
-  name: secretName
-  properties: {
-    value: secretValue
   }
 }
 
