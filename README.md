@@ -4,7 +4,9 @@ This repo provides sample Azure Bicep files for deploying AKS and associated res
 
 ## Deployment (WIP)
 
-* Install Azure CLI and Azure Developer CLI into your local environment.
+* Install [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) into your local environment.
+
+* Instlal [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-windows) into your local environment.
 
 * Clone this repo.
 
