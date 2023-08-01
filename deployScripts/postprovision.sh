@@ -1,7 +1,8 @@
 #!/bin/bash
-appRepo="https://github.com/microsoft/azure-arc-jumpstart-apps"
+appRepo="https://github.com/dkirby-ms/azure-arc-jumpstart-apps"
+appBranch="aks_example"
 ingressNamespace="ingress-nginx"
-appNamespace="hello-world"
+appNamespace="hello-arc"
 certname="ingress-cert"
 certdns="videoai.demo.xyz"
 rgName=$AZURE_RESOURCE_GROUP
@@ -19,16 +20,16 @@ kubectl create namespace $appNamespace
 
 # Create GitOps config for NGINX Ingress Controller
 echo "Creating GitOps config for NGINX Ingress Controller"
-az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-nginx --namespace $ingressNamespace --cluster-type managedClusters --scope cluster --url $appRepo --branch main --sync-interval 3s --kustomization name=nginx path=./nginx/release
+az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-nginx --namespace $ingressNamespace --cluster-type managedClusters --scope cluster --url $appRepo --branch $appBranch --sync-interval 3s --kustomization name=nginx path=./nginx/release
 provisioningState=""
 while [ "$provisioningState" != "Succeeded" ]
 do
     provisioningState=$(az aks show -g aks_bicep_example-dev-rg -n VideoAI-AKS --query provisioningState -o tsv)
 done
 
-# Create GitOps config for Hello-World application
-echo "Creating GitOps config for Hello-World application"
-az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloworld --namespace hello-world --cluster-type managedClusters --scope namespace --url $appRepo --branch main --sync-interval 3s --kustomization name=helloworld path=./hello-arc/yaml
+# Create GitOps config for hello-arc application
+echo "Creating GitOps config for hello-arc application"
+az k8s-configuration flux create --cluster-name "$clusterName" --resource-group "$rgName" --name config-helloworld --namespace hello-arc --cluster-type managedClusters --scope namespace --url $appRepo --branch $appBranch --sync-interval 3s --kustomization name=helloworld path=./hello-arc/yaml
 provisioningState=""
 while [ "$provisioningState" != "Succeeded" ]
 do
@@ -61,6 +62,6 @@ sed -i "s/{JS_TENANTID}/$tenantId/g" $modifiedYaml
 # Deploy ingress controller
 kubectl --namespace $appNamespace apply -f $modifiedYaml
 ip=$(kubectl get service/ingress-nginx-controller --namespace $ingressNamespace --output=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo "Hello-world service IP: $ip"
+echo "hello-arc service IP: $ip"
 #Add-Content -Path $Env:windir\System32\drivers\etc\hosts -Value "`n`t$ip`t$certdns" -Force
 
